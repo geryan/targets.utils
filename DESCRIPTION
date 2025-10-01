@@ -3,7 +3,8 @@ Type: Package
 Title: Simple utilities for working in targets
 Version: 0.1.0
 Authors@R: 
-    person("Gerry", "Ryan", role = "ctb")
+    person("Gerry", "Ryan", , "go@aw.ay", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0003-0183-7630"))
 Description: Nope, it's all in the title.
 License: MIT + file LICENSE
 Encoding: UTF-8
