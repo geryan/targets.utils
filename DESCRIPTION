@@ -17,5 +17,5 @@ LazyData: true
 RoxygenNote: 7.3.2
 Imports: 
     targets
-URL: https://github.com/geryan/targets.utils
+URL: https://github.com/geryan/targets.utils, https://geryan.github.io/targets.utils/
 BugReports: https://github.com/geryan/targets.utils/issues
