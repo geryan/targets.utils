@@ -1,16 +1,10 @@
 Package: targets.utils
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Simple utilities for working in targets
 Version: 0.1.0
-Authors@R: c(
-    person(
-      "Jane", "Doe",
-      email = "jane@example.com",
-      role = c("aut", "cre")
-    )
-  )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
+Authors@R: 
+    person("Gerry", "Ryan", role = "ctb")
+Description: Nope, it's all in the title.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
