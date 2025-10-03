@@ -9,7 +9,8 @@
 #' }
 tl <- function(){
 
-  targets::tar_load_globals()
-  targets::tar_load_everything()
+  targets::tar_load_globals(envir = .GlobalEnv)
+
+  targets::tar_load_everything(envir = .GlobalEnv)
 
 }
