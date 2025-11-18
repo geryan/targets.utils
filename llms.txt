@@ -1,0 +1,24 @@
+# targets.utils
+
+Some simple utility functions for interactively writing and running
+targets pipelines.
+
+## Installation
+
+You can install the development version of targets.utils from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("geryan/targets.utils")
+```
+
+# Package index
+
+## All functions
+
+- [`tl()`](https://geryan.github.io/targets.utils/reference/tl.md) :
+  Targets load globals and everything
+- [`tml()`](https://geryan.github.io/targets.utils/reference/tml.md) :
+  Target make and load
+
