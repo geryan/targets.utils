@@ -1,3 +1,11 @@
+#' NOT WORKING PROPERLY YET
+#'
+#' @param target_name
+#'
+#' @returns
+#' @export
+#'
+#' @examples
 tar_downstream <- function(target_name){
 
   network <- targets::tar_network()
@@ -11,5 +19,7 @@ tar_downstream <- function(target_name){
   )
 
   names(downstream)[-1]
+
+  # not working
 
 }
