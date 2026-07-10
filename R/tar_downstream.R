@@ -3,7 +3,6 @@
 #' @param target_name
 #'
 #' @returns
-#' @export
 #'
 #' @examples
 tar_downstream <- function(target_name){
@@ -21,5 +20,6 @@ tar_downstream <- function(target_name){
   names(downstream)[-1]
 
   # not working
+  # will need to iomport igraph
 
 }
