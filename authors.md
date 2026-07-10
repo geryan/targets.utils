@@ -10,13 +10,13 @@
 Source:
 [`DESCRIPTION`](https://github.com/geryan/targets.utils/blob/main/DESCRIPTION)
 
-Ryan G (2025). *targets.utils: Simple utilities for working in targets*.
+Ryan G (2026). *targets.utils: Simple utilities for working in targets*.
 R package version 0.1.0, <https://github.com/geryan/targets.utils>.
 
     @Manual{,
       title = {targets.utils: Simple utilities for working in targets},
       author = {Gerry Ryan},
-      year = {2025},
+      year = {2026},
       note = {R package version 0.1.0},
       url = {https://github.com/geryan/targets.utils},
     }
