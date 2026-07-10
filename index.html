@@ -50,7 +50,7 @@
 </h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p>Some simple utility functions for interactively writing and running targets pipelines.</p>
+<p>A collection of utility functions for interactively working with <a href="https://books.ropensci.org/targets/" class="external-link">targets</a> pipelines. These functions streamline common workflows like loading target outputs, running specific targets, and handling spatial data.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -58,6 +58,292 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"geryan/targets.utils"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="quick-start-interactive-utilities">Quick Start: Interactive Utilities<a class="anchor" aria-label="anchor" href="#quick-start-interactive-utilities"></a>
+</h2>
+<p>These functions make interactive work with targets pipelines faster:</p>
+<ul>
+<li>
+<strong><code><a href="reference/tl.html">tl()</a></code></strong>: Load all globals and targets with a single command</li>
+<li>
+<strong><code>tml(x)</code></strong>: Make and load a specific target in one call</li>
+<li>
+<strong><code><a href="reference/insert_tar_target.html">insert_tar_target()</a></code> / <code><a href="reference/it.html">it()</a></code></strong>: RStudio addin to insert target skeletons</li>
+</ul>
+<div class="section level3">
+<h3 id="loading-targets-interactively-with-tl">Loading targets interactively with <code>tl()</code>
+<a class="anchor" aria-label="anchor" href="#loading-targets-interactively-with-tl"></a>
+</h3>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># After running tar_make(), load everything at once:</span></span>
+<span><span class="fu"><a href="reference/tl.html">tl</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Equivalent to running:</span></span>
+<span><span class="fu">targets</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_load_globals.html" class="external-link">tar_load_globals</a></span><span class="op">(</span>envir <span class="op">=</span> <span class="va">.GlobalEnv</span><span class="op">)</span></span>
+<span><span class="fu">targets</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_load_everything.html" class="external-link">tar_load_everything</a></span><span class="op">(</span>envir <span class="op">=</span> <span class="va">.GlobalEnv</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="make-and-load-a-single-target-with-tml">Make and load a single target with <code>tml()</code>
+<a class="anchor" aria-label="anchor" href="#make-and-load-a-single-target-with-tml"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Make and immediately load the 'processed_data' target</span></span>
+<span><span class="fu"><a href="reference/tml.html">tml</a></span><span class="op">(</span><span class="va">processed_data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Equivalent to:</span></span>
+<span><span class="fu">targets</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_make.html" class="external-link">tar_make</a></span><span class="op">(</span><span class="va">processed_data</span><span class="op">)</span></span>
+<span><span class="fu">targets</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_load.html" class="external-link">tar_load</a></span><span class="op">(</span>names <span class="op">=</span> <span class="va">processed_data</span>, envir <span class="op">=</span> <span class="va">.GlobalEnv</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="insert-tar_target-skeletons-in-rstudio">Insert tar_target skeletons in RStudio<a class="anchor" aria-label="anchor" href="#insert-tar_target-skeletons-in-rstudio"></a>
+</h3>
+<p>The <code><a href="reference/insert_tar_target.html">insert_tar_target()</a></code> function (aliased as <code><a href="reference/it.html">it()</a></code>) is an RStudio addin that inserts a <code><a href="https://docs.ropensci.org/targets/reference/tar_target.html" class="external-link">tar_target()</a></code> skeleton at your cursor:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># In an R script, position your cursor where you want the skeleton</span></span>
+<span><span class="co"># Then run in the console:</span></span>
+<span><span class="fu"><a href="reference/it.html">it</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Or use Addins menu: Addins &gt; Insert tar_target</span></span>
+<span></span>
+<span><span class="co"># Inserts:</span></span>
+<span><span class="co"># tar_target(</span></span>
+<span><span class="co">#    name = ,</span></span>
+<span><span class="co">#    command = </span></span>
+<span><span class="co">#  ),</span></span></code></pre></div>
+<p>This is especially useful when building target lists:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">tar_script</span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu">tar_target</span><span class="op">(</span>name <span class="op">=</span> <span class="va">raw_data</span>, command <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"data.csv"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="co"># Position cursor here and run it() to insert the next target skeleton</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="handling-nested-spatial-data-with-tar_terra_nested">Handling nested spatial data with <code>tar_terra_nested()</code>
+<a class="anchor" aria-label="anchor" href="#handling-nested-spatial-data-with-tar_terra_nested"></a>
+</h2>
+<p>The <code>geotargets</code> package handles <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> and <code><a href="https://rspatial.github.io/terra/reference/SpatVector-class.html" class="external-link">terra::SpatVector</a></code> objects, but cannot serialize lists containing nested spatial objects. <code><a href="reference/tar_terra_nested.html">tar_terra_nested()</a></code> fills this gap by recursively discovering and managing nested spatial formats within arbitrary R objects.</p>
+<div class="section level3">
+<h3 id="example-nested-spatial-data-in-a-list">Example: Nested spatial data in a list<a class="anchor" aria-label="anchor" href="#example-nested-spatial-data-in-a-list"></a>
+</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/targets/" class="external-link">targets</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_dir.html" class="external-link">tar_dir</a></span><span class="op">(</span><span class="op">{</span></span>
+<span></span>
+<span>  <span class="co"># tar_dir() runs code from a temporary directory.</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_script.html" class="external-link">tar_script</a></span><span class="op">(</span><span class="op">{</span></span>
+<span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/targets/" class="external-link">targets</a></span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/geotargets" class="external-link">geotargets</a></span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/geryan/targets.utils" class="external-link">targets.utils</a></span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="co"># Create a function that produces a nested object with spatial data</span></span>
+<span>    <span class="va">make_nested_object</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
+<span>      <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex"</span>, <span class="st">"elev.tif"</span>, package <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span></span>
+<span>      <span class="va">v</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex"</span>, <span class="st">"lux.shp"</span>, package <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span></span>
+<span>      <span class="co"># Return a list with nested SpatRaster and SpatVector objects</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        raster <span class="op">=</span> <span class="va">r</span>,</span>
+<span>        vector <span class="op">=</span> <span class="va">v</span>,</span>
+<span>        metadata <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>          dataset <span class="op">=</span> <span class="st">"example"</span>,</span>
+<span>          n_cells <span class="op">=</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">ncell</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>,</span>
+<span>          n_features <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      <span class="co"># Use tar_terra_nested() just like tar_target() to handle the list</span></span>
+<span>      <span class="fu"><a href="reference/tar_terra_nested.html">tar_terra_nested</a></span><span class="op">(</span></span>
+<span>        <span class="va">nested_spatial</span>,</span>
+<span>        <span class="fu">make_nested_object</span><span class="op">(</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_make.html" class="external-link">tar_make</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Load and inspect the nested spatial object</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_read.html" class="external-link">tar_read</a></span><span class="op">(</span><span class="va">nested_spatial</span><span class="op">)</span></span>
+<span>  <span class="va">x</span></span>
+<span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="co">#&gt; terra 1.9.38</span></span>
+<span><span class="co">#&gt; + nested_spatial dispatched</span></span>
+<span><span class="co">#&gt; ✔ nested_spatial completed [12ms, 46.45 kB]</span></span>
+<span><span class="co">#&gt; ✔ ended pipeline [220ms, 1 completed, 0 skipped]</span></span>
+<span><span class="co">#&gt; $raster</span></span>
+<span><span class="co">#&gt; class       : SpatRaster</span></span>
+<span><span class="co">#&gt; size        : 90, 95, 1  (nrow, ncol, nlyr)</span></span>
+<span><span class="co">#&gt; resolution  : 0.008333333, 0.008333333  (x, y)</span></span>
+<span><span class="co">#&gt; extent      : 5.741667, 6.533333, 49.44167, 50.19167  (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326)</span></span>
+<span><span class="co">#&gt; source      : rast_000001.tif</span></span>
+<span><span class="co">#&gt; name        : elevation</span></span>
+<span><span class="co">#&gt; min value   :       141</span></span>
+<span><span class="co">#&gt; max value   :       547</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $vector</span></span>
+<span><span class="co">#&gt; class       : SpatVector</span></span>
+<span><span class="co">#&gt; geometry    : polygons</span></span>
+<span><span class="co">#&gt; dimensions  : 12, 6  (geometries, attributes)</span></span>
+<span><span class="co">#&gt; extent      : 5.74414, 6.528252, 49.44781, 50.18162  (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; source      : vect_000002.gpkg</span></span>
+<span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326)</span></span>
+<span><span class="co">#&gt; names       :  ID_1   NAME_1  ID_2   NAME_2  AREA   POP</span></span>
+<span><span class="co">#&gt; type        : &lt;num&gt;    &lt;chr&gt; &lt;num&gt;    &lt;chr&gt; &lt;num&gt; &lt;num&gt;</span></span>
+<span><span class="co">#&gt; values      :     1 Diekirch     1 Clervaux   312 18081</span></span>
+<span><span class="co">#&gt;                   1 Diekirch     2 Diekirch   218 32543</span></span>
+<span><span class="co">#&gt;                   1 Diekirch     3  Redange   259 18664</span></span>
+<span><span class="co">#&gt;               ...</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $metadata</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 3</span></span>
+<span><span class="co">#&gt;   dataset n_cells n_features</span></span>
+<span><span class="co">#&gt; * &lt;chr&gt;     &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 example    8550         12</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="why-tar_terra_nested">Why <code>tar_terra_nested()</code>?<a class="anchor" aria-label="anchor" href="#why-tar_terra_nested"></a>
+</h3>
+<p>The <code>targets</code> package stores objects as RDS files by default, which cannot serialize <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> or <code><a href="https://rspatial.github.io/terra/reference/SpatVector-class.html" class="external-link">terra::SpatVector</a></code> objects. The <code>geotargets</code> package solves this for top-level spatial objects using custom formats that write to GeoTIFF and GeoPackage files.</p>
+<p>However, <code>geotargets</code> cannot handle objects that <em>contain</em> nested spatial formats, such as:</p>
+<ul>
+<li>Lists with spatial elements</li>
+<li>Data frames with spatial list-columns<br>
+</li>
+<li>Nested lists mixing spatial and non-spatial data</li>
+<li>S4 objects with spatial slot data</li>
+</ul>
+<p><code><a href="reference/tar_terra_nested.html">tar_terra_nested()</a></code> works by:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Recursively scanning</strong> your object for all <code>SpatRaster</code> and <code>SpatVector</code> objects</li>
+<li>
+<strong>Writing each</strong> to individual files (GeoTIFF for rasters, GeoPackage for vectors)</li>
+<li>
+<strong>Replacing them</strong> with lightweight reference objects in a skeleton</li>
+<li>
+<strong>Compressing</strong> the skeleton + spatial files into a single <code>.tar.gz</code> archive</li>
+<li>
+<strong>Reconstructing</strong> the object by restoring spatial files on read</li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="advanced-custom-file-formats-and-options">Advanced: Custom file formats and options<a class="anchor" aria-label="anchor" href="#advanced-custom-file-formats-and-options"></a>
+</h3>
+<p>You can customize how spatial data is written:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_script.html" class="external-link">tar_script</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/tar_terra_nested.html">tar_terra_nested</a></span><span class="op">(</span></span>
+<span>      <span class="va">my_target</span>,</span>
+<span>      <span class="fu">make_complex_nested_object</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      <span class="co"># Use Cloud-Optimized GeoTIFF for rasters</span></span>
+<span>      raster_filetype <span class="op">=</span> <span class="st">"COG"</span>,</span>
+<span>      <span class="co"># Custom raster creation options</span></span>
+<span>      raster_gdal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"COMPRESS=DEFLATE"</span>, <span class="st">"PREDICTOR=2"</span><span class="op">)</span>,</span>
+<span>      <span class="co"># Use shapefile instead of GeoPackage for vectors</span></span>
+<span>      vector_filetype <span class="op">=</span> <span class="st">"ESRI SHAPEFILE"</span>,</span>
+<span>      <span class="co"># Pass additional options to terra functions</span></span>
+<span>      raster_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>NAflag <span class="op">=</span> <span class="op">-</span><span class="fl">9999</span><span class="op">)</span>,</span>
+<span>      vector_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>layer <span class="op">=</span> <span class="st">"myshapes"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="example-nested-spatial-data-in-a-tibble">Example: Nested spatial data in a tibble<a class="anchor" aria-label="anchor" href="#example-nested-spatial-data-in-a-tibble"></a>
+</h3>
+<p>You can even use <code><a href="reference/tar_terra_nested.html">tar_terra_nested()</a></code> with tibbles containing spatial list-columns:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_script.html" class="external-link">tar_script</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/targets/" class="external-link">targets</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/geryan/targets.utils" class="external-link">targets.utils</a></span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">make_spatial_tibble</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">r1</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex"</span>, <span class="st">"elev.tif"</span>, package <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex"</span>, <span class="st">"elev.tif"</span>, package <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>      id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location_a"</span>, <span class="st">"location_b"</span><span class="op">)</span>,</span>
+<span>      raster <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">r1</span>, <span class="va">r2</span><span class="op">)</span>,</span>
+<span>      description <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Elevation at A"</span>, <span class="st">"Elevation at B"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/tar_terra_nested.html">tar_terra_nested</a></span><span class="op">(</span></span>
+<span>      <span class="va">spatial_tibble</span>,</span>
+<span>      <span class="fu">make_spatial_tibble</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="complete-example-an-analytical-workflow">Complete Example: An analytical workflow<a class="anchor" aria-label="anchor" href="#complete-example-an-analytical-workflow"></a>
+</h2>
+<p>Here’s a more realistic example combining multiple targets.utils functions:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_script.html" class="external-link">tar_script</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/targets/" class="external-link">targets</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/geryan/targets.utils" class="external-link">targets.utils</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># A helper function that produces nested spatial data</span></span>
+<span>  <span class="va">process_spatial_data</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">raster_file</span>, <span class="va">vector_file</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      raster <span class="op">=</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">raster_file</span><span class="op">)</span>,</span>
+<span>      vector <span class="op">=</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="va">vector_file</span><span class="op">)</span>,</span>
+<span>      processing_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="co"># Load raw data</span></span>
+<span>    <span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_target.html" class="external-link">tar_target</a></span><span class="op">(</span></span>
+<span>      <span class="va">raw_spatial</span>,</span>
+<span>      <span class="fu">process_spatial_data</span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex"</span>, <span class="st">"elev.tif"</span>, package <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"ex"</span>, <span class="st">"lux.shp"</span>, package <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span>
+<span>      <span class="op">)</span>,</span>
+<span>      <span class="co"># Use tar_terra_nested to handle the nested list</span></span>
+<span>      format <span class="op">=</span> <span class="st">"custom_format"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    </span>
+<span>    <span class="co"># Use it() here to insert the next target skeleton</span></span>
+<span>    <span class="co"># Cursor position + it() generates: tar_target(name = , command = ),</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<p>Then interactively:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># After editing your _targets.R:</span></span>
+<span><span class="fu"><a href="reference/tml.html">tml</a></span><span class="op">(</span><span class="va">raw_spatial</span><span class="op">)</span>  <span class="co"># Make and load raw_spatial target</span></span>
+<span></span>
+<span><span class="co"># Inspect the loaded data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">raw_spatial</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># When done with all targets:</span></span>
+<span><span class="fu"><a href="reference/tl.html">tl</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Load everything into your session</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
