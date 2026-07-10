@@ -5,6 +5,9 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/geryan/targets.utils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/geryan/targets.utils/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/geryan/targets.utils/branch/main/graph/badge.svg)](https://app.codecov.io/gh/geryan/targets.utils?branch=main)
 <!-- badges: end -->
 
 A collection of utility functions for interactively working with
@@ -162,8 +165,8 @@ tar_dir({
 })
 #> terra 1.9.38
 #> + nested_spatial dispatched
-#> ✔ nested_spatial completed [13ms, 46.45 kB]
-#> ✔ ended pipeline [224ms, 1 completed, 0 skipped]
+#> ✔ nested_spatial completed [12ms, 46.45 kB]
+#> ✔ ended pipeline [222ms, 1 completed, 0 skipped]
 #> $raster
 #> class       : SpatRaster
 #> size        : 90, 95, 1  (nrow, ncol, nlyr)

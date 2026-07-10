@@ -1,0 +1,15 @@
+* using log directory ‘/Users/gryan/Documents/tki_work/targets.utils/..Rcheck’
+* using R version 4.6.1 (2026-06-24)
+* using platform: aarch64-apple-darwin23
+* R was compiled by
+    Apple clang version 17.0.0 (clang-1700.3.19.1)
+    GNU Fortran (GCC) 14.2.0
+* running under: macOS Tahoe 26.5.2
+* using session charset: UTF-8
+* current time: 2026-07-10 05:01:02 UTC
+* using option ‘--no-build-vignettes’
+* checking for file ‘./DESCRIPTION’ ... ERROR
+Required fields missing or empty:
+  ‘Author’ ‘Maintainer’
+* DONE
+Status: 1 ERROR
