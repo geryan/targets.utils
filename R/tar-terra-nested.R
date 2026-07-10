@@ -169,8 +169,28 @@ tar_terra_nested <- function(
 
 
 # Internal functions -----------------------------------------------------------
-#' @export
+
+#' Write nested terra objects to a tar archive
+#'
+#' Internal function called by the tar_terra_nested format's write method.
+#' Recursively finds and serializes SpatRaster and SpatVector objects within
+#' an arbitrary R structure, archiving them and a skeleton representation of
+#' the original object.
+#'
+#' @param object An R object that may contain nested terra objects.
+#' @param path Character. Path to write the tar archive to.
+#' @param raster_filetype Character. GDAL raster driver.
+#' @param raster_gdal Character vector or NULL. GDAL raster options.
+#' @param raster_datatype Character or NULL. Raster datatype.
+#' @param vector_filetype Character. GDAL vector driver.
+#' @param vector_gdal Character vector or NULL. GDAL vector options.
+#' @param raster_args Named list of additional terra::writeRaster() arguments.
+#' @param vector_args Named list of additional terra::writeVector() arguments.
+#'
+#' @return Invisibly returns the path to the written archive.
+#'
 #' @keywords internal
+#' @export
 write_terra_nested <- function(
     object,
     path,
@@ -242,8 +262,20 @@ write_terra_nested <- function(
   invisible(path)
 }
 
-#' @export
+#' Read nested terra objects from a tar archive
+#'
+#' Internal function called by the tar_terra_nested format's read method.
+#' Extracts and reconstructs SpatRaster and SpatVector objects from an archive
+#' created by [write_terra_nested()]. Files are extracted to a session-persistent
+#' location so that terra's lazy-loading of rasters works correctly.
+#'
+#' @param path Character. Path to the tar archive.
+#'
+#' @return The reconstructed object with all nested SpatRaster and SpatVector
+#'   objects restored from disk files.
+#'
 #' @keywords internal
+#' @export
 read_terra_nested <- function(path) {
   # terra reads SpatRasters lazily: terra::rast() keeps a pointer to the file
   # on disk rather than loading cell values into memory. The extracted files

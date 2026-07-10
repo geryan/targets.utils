@@ -7,8 +7,16 @@
 tar_downstream(target_name)
 }
 \arguments{
-\item{target_name}{}
+\item{target_name}{Unquoted target name.}
+}
+\value{
+Character vector of downstream target names.
 }
 \description{
 NOT WORKING PROPERLY YET
 }
+\examples{
+\dontrun{tar_downstream(my_target)}
+
+}
+\keyword{internal}

@@ -20,7 +20,11 @@ Suggests:
     bssdm,
     geotargets,
     knitr,
-    rmarkdown
+    rmarkdown,
+    rlang,
+    testthat,
+    tibble,
+    withr
 Remotes: 
     cebra-analytics/bssdm
 VignetteBuilder: knitr
