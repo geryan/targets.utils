@@ -1,0 +1,4 @@
+Name: Insert tar_target
+Description: Insert a targets::tar_target() skeleton at the cursor.
+Binding: insert_tar_target
+Interactive: false
