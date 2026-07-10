@@ -49,7 +49,7 @@
 <div class="page-header"><h1 id="targetsutils">targets.utils<a class="anchor" aria-label="anchor" href="#targetsutils"></a>
 </h1></div>
 <!-- badges: start -->
-<!-- badges: end -->
+
 <p>A collection of utility functions for interactively working with <a href="https://books.ropensci.org/targets/" class="external-link">targets</a> pipelines. These functions streamline common workflows like loading target outputs, running specific targets, and handling spatial data.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -69,7 +69,7 @@
 <li>
 <strong><code>tml(x)</code></strong>: Make and load a specific target in one call</li>
 <li>
-<strong><code><a href="reference/insert_tar_target.html">insert_tar_target()</a></code> / <code><a href="reference/it.html">it()</a></code></strong>: RStudio addin to insert target skeletons</li>
+<strong><code><a href="reference/insert_tar_target.html">insert_tar_target()</a></code></strong>: RStudio addin to insert target skeletons</li>
 </ul>
 <div class="section level3">
 <h3 id="loading-targets-interactively-with-tl">Loading targets interactively with <code>tl()</code>
@@ -98,19 +98,20 @@
 <div class="section level3">
 <h3 id="insert-tar_target-skeletons-in-rstudio">Insert tar_target skeletons in RStudio<a class="anchor" aria-label="anchor" href="#insert-tar_target-skeletons-in-rstudio"></a>
 </h3>
-<p>The <code><a href="reference/insert_tar_target.html">insert_tar_target()</a></code> function (aliased as <code><a href="reference/it.html">it()</a></code>) is an RStudio addin that inserts a <code><a href="https://docs.ropensci.org/targets/reference/tar_target.html" class="external-link">tar_target()</a></code> skeleton at your cursor:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># In an R script, position your cursor where you want the skeleton</span></span>
-<span><span class="co"># Then run in the console:</span></span>
-<span><span class="fu"><a href="reference/it.html">it</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Or use Addins menu: Addins &gt; Insert tar_target</span></span>
-<span></span>
-<span><span class="co"># Inserts:</span></span>
-<span><span class="co"># tar_target(</span></span>
-<span><span class="co">#    name = ,</span></span>
-<span><span class="co">#    command = </span></span>
-<span><span class="co">#  ),</span></span></code></pre></div>
+<p>The <code><a href="reference/insert_tar_target.html">insert_tar_target()</a></code> function is an RStudio addin that inserts a <code><a href="https://docs.ropensci.org/targets/reference/tar_target.html" class="external-link">tar_target()</a></code> skeleton at your cursor:</p>
+<p>You really never want to type this youself — sorta defeats the purpose.</p>
+<p>You <em>can</em> use the Addins menu:</p>
+<p>Addins &gt; Insert tar_target</p>
+<p>But this is also tedious.</p>
+<p>The main point is to bind it to a shortcut key, e.g. Cmd+t, and blammo, target skeleton inserted into your list and onward and upward:</p>
+<p>Tools &gt; Modify Keyboard Shortcuts</p>
+<p>Find Insert <code>tar_target</code>, specify your preferred hotkey and apply away.</p>
+<p>This functionality inspired with much admiration by <a href="https://github.com/MilesMcBain/fnmate" class="external-link">Mile’s McBain’s <code>fnmate</code> package</a></p>
+<p>Inserts:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">tar_target</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>   <span class="at">name =</span> ,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>   <span class="at">command =</span> </span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a> ),</span></code></pre></div>
 <p>This is especially useful when building target lists:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tar_script</span><span class="op">(</span><span class="op">{</span></span>
@@ -125,7 +126,7 @@
 <h2 id="handling-nested-spatial-data-with-tar_terra_nested">Handling nested spatial data with <code>tar_terra_nested()</code>
 <a class="anchor" aria-label="anchor" href="#handling-nested-spatial-data-with-tar_terra_nested"></a>
 </h2>
-<p>The <code>geotargets</code> package handles <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> and <code><a href="https://rspatial.github.io/terra/reference/SpatVector-class.html" class="external-link">terra::SpatVector</a></code> objects, but cannot serialize lists containing nested spatial objects. <code><a href="reference/tar_terra_nested.html">tar_terra_nested()</a></code> fills this gap by recursively discovering and managing nested spatial formats within arbitrary R objects.</p>
+<p>The <a href="https://docs.ropensci.org/geotargets/index.html" class="external-link"><code>geotargets</code> package</a> handles <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> and <code><a href="https://rspatial.github.io/terra/reference/SpatVector-class.html" class="external-link">terra::SpatVector</a></code> objects, but cannot serialize lists containing nested spatial objects. <code><a href="reference/tar_terra_nested.html">tar_terra_nested()</a></code> fills this gap by recursively discovering and managing nested spatial formats within arbitrary R objects.</p>
 <div class="section level3">
 <h3 id="example-nested-spatial-data-in-a-list">Example: Nested spatial data in a list<a class="anchor" aria-label="anchor" href="#example-nested-spatial-data-in-a-list"></a>
 </h3>
@@ -186,7 +187,7 @@
 <span><span class="co">#&gt; terra 1.9.38</span></span>
 <span><span class="co">#&gt; + nested_spatial dispatched</span></span>
 <span><span class="co">#&gt; ✔ nested_spatial completed [12ms, 46.45 kB]</span></span>
-<span><span class="co">#&gt; ✔ ended pipeline [220ms, 1 completed, 0 skipped]</span></span>
+<span><span class="co">#&gt; ✔ ended pipeline [222ms, 1 completed, 0 skipped]</span></span>
 <span><span class="co">#&gt; $raster</span></span>
 <span><span class="co">#&gt; class       : SpatRaster</span></span>
 <span><span class="co">#&gt; size        : 90, 95, 1  (nrow, ncol, nlyr)</span></span>
@@ -299,9 +300,9 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="complete-example-an-analytical-workflow">Complete Example: An analytical workflow<a class="anchor" aria-label="anchor" href="#complete-example-an-analytical-workflow"></a>
+<h2 id="example-analytical-workflow">Example analytical workflow<a class="anchor" aria-label="anchor" href="#example-analytical-workflow"></a>
 </h2>
-<p>Here’s a more realistic example combining multiple targets.utils functions:</p>
+<p>Here’s a toy example combining multiple targets.utils functions:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_script.html" class="external-link">tar_script</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/targets/" class="external-link">targets</a></span><span class="op">)</span></span>
@@ -377,7 +378,13 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/geryan/targets.utils/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/geryan/targets.utils/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/geryan/targets.utils?branch=main" class="external-link"><img src="https://codecov.io/gh/geryan/targets.utils/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>

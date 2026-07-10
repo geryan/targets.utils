@@ -23,8 +23,7 @@ These functions make interactive work with targets pipelines faster:
 - **[`tl()`](https://geryan.github.io/targets.utils/reference/tl.md)**:
   Load all globals and targets with a single command
 - **`tml(x)`**: Make and load a specific target in one call
-- **[`insert_tar_target()`](https://geryan.github.io/targets.utils/reference/insert_tar_target.md)
-  / [`it()`](https://geryan.github.io/targets.utils/reference/it.md)**:
+- **[`insert_tar_target()`](https://geryan.github.io/targets.utils/reference/insert_tar_target.md)**:
   RStudio addin to insert target skeletons
 
 ### Loading targets interactively with `tl()`
@@ -55,25 +54,35 @@ targets::tar_load(names = processed_data, envir = .GlobalEnv)
 
 The
 [`insert_tar_target()`](https://geryan.github.io/targets.utils/reference/insert_tar_target.md)
-function (aliased as
-[`it()`](https://geryan.github.io/targets.utils/reference/it.md)) is an
-RStudio addin that inserts a
+function is an RStudio addin that inserts a
 [`tar_target()`](https://docs.ropensci.org/targets/reference/tar_target.html)
 skeleton at your cursor:
 
+You really never want to type this youself — sorta defeats the purpose.
+
+You *can* use the Addins menu:
+
+Addins \> Insert tar_target
+
+But this is also tedious.
+
+The main point is to bind it to a shortcut key, e.g. Cmd+t, and blammo,
+target skeleton inserted into your list and onward and upward:
+
+Tools \> Modify Keyboard Shortcuts
+
+Find Insert `tar_target`, specify your preferred hotkey and apply away.
+
+This functionality inspired with much admiration by [Mile’s McBain’s
+`fnmate` package](https://github.com/MilesMcBain/fnmate)
+
+Inserts:
+
 ``` r
-
-# In an R script, position your cursor where you want the skeleton
-# Then run in the console:
-it()
-
-# Or use Addins menu: Addins > Insert tar_target
-
-# Inserts:
-# tar_target(
-#    name = ,
-#    command = 
-#  ),
+tar_target(
+   name = ,
+   command = 
+ ),
 ```
 
 This is especially useful when building target lists:
@@ -90,7 +99,8 @@ tar_script({
 
 ## Handling nested spatial data with `tar_terra_nested()`
 
-The `geotargets` package handles
+The [`geotargets`
+package](https://docs.ropensci.org/geotargets/index.html) handles
 [`terra::SpatRaster`](https://rspatial.github.io/terra/reference/SpatRaster-class.html)
 and
 [`terra::SpatVector`](https://rspatial.github.io/terra/reference/SpatVector-class.html)
@@ -159,7 +169,7 @@ tar_dir({
 #> terra 1.9.38
 #> + nested_spatial dispatched
 #> ✔ nested_spatial completed [12ms, 46.45 kB]
-#> ✔ ended pipeline [220ms, 1 completed, 0 skipped]
+#> ✔ ended pipeline [222ms, 1 completed, 0 skipped]
 #> $raster
 #> class       : SpatRaster
 #> size        : 90, 95, 1  (nrow, ncol, nlyr)
@@ -281,10 +291,9 @@ tar_script({
 })
 ```
 
-## Complete Example: An analytical workflow
+## Example analytical workflow
 
-Here’s a more realistic example combining multiple targets.utils
-functions:
+Here’s a toy example combining multiple targets.utils functions:
 
 ``` r
 
