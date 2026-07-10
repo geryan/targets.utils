@@ -50,11 +50,12 @@
 </h1></div>
 <!-- badges: start -->
 
+<p>A haphazard collection of wildly different utilities with no common theme but for working with <code>targets</code> pipelines. Or as the AI puts it:</p>
 <p>A collection of utility functions for interactively working with <a href="https://books.ropensci.org/targets/" class="external-link">targets</a> pipelines. These functions streamline common workflows like loading target outputs, running specific targets, and handling spatial data.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of targets.utils from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>You can install the development (only) version (I’m not dealing with putting this on fucking cran) of <code>targets.utils</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"geryan/targets.utils"</span><span class="op">)</span></span></code></pre></div>
@@ -112,12 +113,16 @@
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>   <span class="at">name =</span> ,</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>   <span class="at">command =</span> </span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a> ),</span></code></pre></div>
-<p>This is especially useful when building target lists:</p>
+<p>Note that there is a comma <code>,</code> at the end of the skeleton — it is the author’s strong opinion born of experience that most new targets are intra-list and therefore this saves user the drudgery of going <strong>all the way</strong> to the end of the skeleton to insert one and then return to adding whatever the were going to add; if indeed humans still add code by hand in the foul year of our lord 20-whatever-this-is.</p>
+<p>So:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tar_script</span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="fu">tar_target</span><span class="op">(</span>name <span class="op">=</span> <span class="va">raw_data</span>, command <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"data.csv"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="co"># Position cursor here and run it() to insert the next target skeleton</span></span>
+<span>    </span>
+<span>    <span class="co"># Position cursor here and slam shortcut key to insert the next target skeleton</span></span>
+<span>    </span>
+<span>    <span class="fu">tar_target</span><span class="op">(</span>name <span class="op">=</span> <span class="va">next_data</span>, command <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"next_data.csv"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -187,7 +192,7 @@
 <span><span class="co">#&gt; terra 1.9.38</span></span>
 <span><span class="co">#&gt; + nested_spatial dispatched</span></span>
 <span><span class="co">#&gt; ✔ nested_spatial completed [12ms, 46.45 kB]</span></span>
-<span><span class="co">#&gt; ✔ ended pipeline [222ms, 1 completed, 0 skipped]</span></span>
+<span><span class="co">#&gt; ✔ ended pipeline [219ms, 1 completed, 0 skipped]</span></span>
 <span><span class="co">#&gt; $raster</span></span>
 <span><span class="co">#&gt; class       : SpatRaster</span></span>
 <span><span class="co">#&gt; size        : 90, 95, 1  (nrow, ncol, nlyr)</span></span>
@@ -267,6 +272,7 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<p>AI did much of this, so it will probably break. Trust it at your own peril.</p>
 </div>
 <div class="section level3">
 <h3 id="example-nested-spatial-data-in-a-tibble">Example: Nested spatial data in a tibble<a class="anchor" aria-label="anchor" href="#example-nested-spatial-data-in-a-tibble"></a>

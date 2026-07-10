@@ -1,5 +1,8 @@
 # targets.utils
 
+A haphazard collection of wildly different utilities with no common
+theme but for working with `targets` pipelines. Or as the AI puts it:
+
 A collection of utility functions for interactively working with
 [targets](https://books.ropensci.org/targets/) pipelines. These
 functions streamline common workflows like loading target outputs,
@@ -7,7 +10,8 @@ running specific targets, and handling spatial data.
 
 ## Installation
 
-You can install the development version of targets.utils from
+You can install the development (only) version (I’m not dealing with
+putting this on fucking cran) of `targets.utils` from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -85,14 +89,24 @@ tar_target(
  ),
 ```
 
-This is especially useful when building target lists:
+Note that there is a comma `,` at the end of the skeleton — it is the
+author’s strong opinion born of experience that most new targets are
+intra-list and therefore this saves user the drudgery of going **all the
+way** to the end of the skeleton to insert one and then return to adding
+whatever the were going to add; if indeed humans still add code by hand
+in the foul year of our lord 20-whatever-this-is.
+
+So:
 
 ``` r
 
 tar_script({
   list(
     tar_target(name = raw_data, command = read.csv("data.csv")),
-    # Position cursor here and run it() to insert the next target skeleton
+    
+    # Position cursor here and slam shortcut key to insert the next target skeleton
+    
+    tar_target(name = next_data, command = read.csv("next_data.csv"))
   )
 })
 ```
@@ -169,7 +183,7 @@ tar_dir({
 #> terra 1.9.38
 #> + nested_spatial dispatched
 #> ✔ nested_spatial completed [12ms, 46.45 kB]
-#> ✔ ended pipeline [222ms, 1 completed, 0 skipped]
+#> ✔ ended pipeline [219ms, 1 completed, 0 skipped]
 #> $raster
 #> class       : SpatRaster
 #> size        : 90, 95, 1  (nrow, ncol, nlyr)
@@ -256,6 +270,9 @@ tar_script({
   )
 })
 ```
+
+AI did much of this, so it will probably break. Trust it at your own
+peril.
 
 ### Example: Nested spatial data in a tibble
 

@@ -1,4 +1,4 @@
 # License
 
     YEAR: 2025
-    COPYRIGHT HOLDER: targets.utils authors
+    COPYRIGHT HOLDER: Gerry Ryan
