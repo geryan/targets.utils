@@ -1,0 +1,108 @@
+# Storing nested spatial output with tar_terra_nested(): a MESS example
+
+Some functions return a *list* of
+[`terra::SpatRaster`](https://rspatial.github.io/terra/reference/SpatRaster-class.html)
+objects rather than a single raster. The
+[`geotargets`](https://docs.ropensci.org/geotargets/) package can
+serialize individual `SpatRaster` objects, but not a list that contains
+several of them.
+[`tar_terra_nested()`](https://geryan.github.io/targets.utils/reference/tar_terra_nested.md)
+fills this gap by recursively finding and serializing every spatial
+object inside an arbitrary R structure.
+
+A natural example is
+[`bssdm::mess()`](https://cebra-analytics.github.io/bssdm/reference/mess.html),
+which calculates Multivariate Environmental Similarity Surfaces. With
+`full = TRUE` it returns a `MessResult` list of four `SpatRaster`
+layers: `mess`, `mess_by_variable`, `mod`, and `mos`.
+
+This vignette keeps things lightweight: rather than downloading global
+climate data via `geodata`, it builds a small synthetic three-variable
+raster so the example runs in a fraction of a second and requires no
+network access.
+
+``` r
+
+library(targets)
+
+tar_dir({
+
+  # tar_dir() runs the pipeline in a temporary directory.
+
+  tar_script({
+
+    library(targets)
+    library(geotargets)
+    library(terra)
+    library(bssdm)
+    library(targets.utils)
+
+    # Build a small synthetic climate raster and compute MESS against a
+    # sample of reference cells. Everything is generated in-memory, so no
+    # data is downloaded.
+    make_mess <- function() {
+
+      set.seed(4172)
+
+      r <- rast(
+        nrows = 20, ncols = 20, nlyrs = 3,
+        xmin = 0, xmax = 10, ymin = 0, ymax = 10
+      )
+      names(r) <- c("bio1", "bio12", "bio5")
+      values(r) <- cbind(
+        runif(ncell(r), 5, 25),      # mean temperature
+        runif(ncell(r), 200, 2000),  # annual precipitation
+        runif(ncell(r), 20, 40)      # max temperature
+      )
+
+      # Reference values drawn from a random sample of cells
+      ref <- spatSample(
+        r, size = 30, method = "random",
+        as.df = TRUE, na.rm = TRUE
+      )
+
+      # mess() returns a MessResult: a list of several SpatRasters
+      mess(r, ref, full = TRUE)
+    }
+
+    list(
+      # tar_terra_nested() handles the list of rasters that tar_target()
+      # alone could not serialize.
+      tar_terra_nested(
+        mess_result,
+        make_mess()
+      )
+    )
+  })
+
+  tar_make()
+
+  # Read the target back: the MessResult list is reconstructed, with each
+  # SpatRaster restored from its own file on disk.
+  x <- tar_read(mess_result)
+  print(class(x))
+  print(names(x))
+  x$mess
+
+})
+#> terra 1.9.34
+#> + mess_result dispatched
+#> ✔ mess_result completed [143ms, 4.32 kB]
+#> ✔ ended pipeline [323ms, 1 completed, 0 skipped]
+#> [1] "MessResult" "list"      
+#> [1] "mess"             "mess_by_variable" "mod"              "mos"
+#> class       : SpatRaster
+#> size        : 20, 20, 1  (nrow, ncol, nlyr)
+#> resolution  : 0.5, 0.5  (x, y)
+#> extent      : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)
+#> coord. ref. : lon/lat WGS 84 (EPSG:4326)
+#> source      : rast_000001.tif
+#> name        :      mess
+#> min value   : -3.785846
+#> max value   :        80
+```
+
+The reconstructed object retains its original `MessResult` class and all
+four `SpatRaster` layers, each transparently restored from disk. The
+same approach works for any function that returns spatial objects nested
+inside lists, data frames, or other R structures.

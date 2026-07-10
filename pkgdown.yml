@@ -1,8 +1,9 @@
 pandoc: 3.8.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
-articles: {}
-last_built: 2026-07-10T05:58Z
+articles:
+  mess-tar-terra-nested: mess-tar-terra-nested.html
+last_built: 2026-07-10T06:36Z
 urls:
   reference: https://geryan.github.io/targets.utils/reference
   article: https://geryan.github.io/targets.utils/articles
