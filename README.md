@@ -28,8 +28,7 @@ These functions make interactive work with targets pipelines faster:
 
 - **`tl()`**: Load all globals and targets with a single command
 - **`tml(x)`**: Make and load a specific target in one call
-- **`insert_tar_target()` / `it()`**: RStudio addin to insert target
-  skeletons
+- **`insert_tar_target()`**: RStudio addin to insert target skeletons
 
 ### Loading targets interactively with `tl()`
 
@@ -55,21 +54,34 @@ targets::tar_load(names = processed_data, envir = .GlobalEnv)
 
 ### Insert tar_target skeletons in RStudio
 
-The `insert_tar_target()` function (aliased as `it()`) is an RStudio
-addin that inserts a `tar_target()` skeleton at your cursor:
+The `insert_tar_target()` function is an RStudio addin that inserts a
+`tar_target()` skeleton at your cursor:
+
+You really never want to type this youself — sorta defeats the purpose.
+
+You *can* use the Addins menu:
+
+Addins \> Insert tar_target
+
+But this is also tedious.
+
+The main point is to bind it to a shortcut key, e.g. Cmd+t, and blammo,
+target skeleton inserted into your list and onward and upward:
+
+Tools \> Modify Keyboard Shortcuts
+
+Find Insert `tar_target`, specify your preferred hotkey and apply away.
+
+This functionality inspired with much admiration by [Mile’s McBain’s
+`fnmate` package](https://github.com/MilesMcBain/fnmate)
+
+Inserts:
 
 ``` r
-# In an R script, position your cursor where you want the skeleton
-# Then run in the console:
-it()
-
-# Or use Addins menu: Addins > Insert tar_target
-
-# Inserts:
-# tar_target(
-#    name = ,
-#    command = 
-#  ),
+tar_target(
+   name = ,
+   command = 
+ ),
 ```
 
 This is especially useful when building target lists:
@@ -85,11 +97,12 @@ tar_script({
 
 ## Handling nested spatial data with `tar_terra_nested()`
 
-The `geotargets` package handles `terra::SpatRaster` and
-`terra::SpatVector` objects, but cannot serialize lists containing
-nested spatial objects. `tar_terra_nested()` fills this gap by
-recursively discovering and managing nested spatial formats within
-arbitrary R objects.
+The [`geotargets`
+package](https://docs.ropensci.org/geotargets/index.html) handles
+`terra::SpatRaster` and `terra::SpatVector` objects, but cannot
+serialize lists containing nested spatial objects. `tar_terra_nested()`
+fills this gap by recursively discovering and managing nested spatial
+formats within arbitrary R objects.
 
 ### Example: Nested spatial data in a list
 
@@ -149,8 +162,8 @@ tar_dir({
 })
 #> terra 1.9.38
 #> + nested_spatial dispatched
-#> ✔ nested_spatial completed [12ms, 46.45 kB]
-#> ✔ ended pipeline [220ms, 1 completed, 0 skipped]
+#> ✔ nested_spatial completed [13ms, 46.45 kB]
+#> ✔ ended pipeline [224ms, 1 completed, 0 skipped]
 #> $raster
 #> class       : SpatRaster
 #> size        : 90, 95, 1  (nrow, ncol, nlyr)
@@ -265,10 +278,9 @@ tar_script({
 })
 ```
 
-## Complete Example: An analytical workflow
+## Example analytical workflow
 
-Here’s a more realistic example combining multiple targets.utils
-functions:
+Here’s a toy example combining multiple targets.utils functions:
 
 ``` r
 tar_script({
