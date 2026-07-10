@@ -169,9 +169,8 @@ tar_terra_nested <- function(
 
 
 # Internal functions -----------------------------------------------------------
-
+#' @export
 #' @keywords internal
-#' @noRd
 write_terra_nested <- function(
     object,
     path,
@@ -243,9 +242,8 @@ write_terra_nested <- function(
   invisible(path)
 }
 
-
+#' @export
 #' @keywords internal
-#' @noRd
 read_terra_nested <- function(path) {
   root <- tempfile("targets_utils_terra_nested_read_")
   dir.create(root, recursive = TRUE, showWarnings = FALSE)

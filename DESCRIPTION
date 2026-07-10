@@ -16,5 +16,13 @@ Imports:
     targets,
     terra,
     utils
+Suggests: 
+    bssdm,
+    geotargets,
+    knitr,
+    rmarkdown
+Remotes: 
+    cebra-analytics/bssdm
+VignetteBuilder: knitr
 URL: https://github.com/geryan/targets.utils, https://geryan.github.io/targets.utils/
 BugReports: https://github.com/geryan/targets.utils/issues
