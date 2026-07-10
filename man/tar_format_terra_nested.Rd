@@ -41,12 +41,5 @@ A custom target format object from [targets::tar_format()].
 }
 \description{
 This format recursively searches an R object for nested
-[terra::SpatRaster-class] and [terra::SpatVector-class] objects. Spatial
-objects are written to geospatial files, the original object is replaced by a
-serialisable skeleton, and the whole result is packed into a single archive
-suitable for storage by `targets`.
-}
-\details{
-On read, the archive is unpacked, the skeleton is loaded, and all nested terra
-objects are restored with [terra::rast()] or [terra::vect()].
+[terra::SpatRaster-class] and [terra::SpatVector-class] objects.
 }

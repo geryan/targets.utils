@@ -1,13 +1,7 @@
 #' Create a custom targets format for nested terra objects
 #'
 #' This format recursively searches an R object for nested
-#' [terra::SpatRaster-class] and [terra::SpatVector-class] objects. Spatial
-#' objects are written to geospatial files, the original object is replaced by a
-#' serialisable skeleton, and the whole result is packed into a single archive
-#' suitable for storage by `targets`.
-#'
-#' On read, the archive is unpacked, the skeleton is loaded, and all nested terra
-#' objects are restored with [terra::rast()] or [terra::vect()].
+#' [terra::SpatRaster-class] and [terra::SpatVector-class] objects.
 #'
 #' @param raster_filetype Character of length 1. GDAL raster driver passed to
 #'   [terra::writeRaster()]. Defaults to `"GTiff"`.
@@ -36,14 +30,6 @@ tar_format_terra_nested <- function(
     raster_args = list(),
     vector_args = list()
 ) {
-  force(raster_filetype)
-  force(raster_gdal)
-  force(raster_datatype)
-  force(vector_filetype)
-  force(vector_gdal)
-  force(raster_args)
-  force(vector_args)
-
   targets::tar_format(
     write = function(object, path) {
       write_fun <- utils::getFromNamespace(
@@ -54,13 +40,13 @@ tar_format_terra_nested <- function(
       write_fun(
         object = object,
         path = path,
-        raster_filetype = raster_filetype,
-        raster_gdal = raster_gdal,
-        raster_datatype = raster_datatype,
-        vector_filetype = vector_filetype,
-        vector_gdal = vector_gdal,
-        raster_args = raster_args,
-        vector_args = vector_args
+        raster_filetype = TARGETS_UTILS_RASTER_FILETYPE,
+        raster_gdal = TARGETS_UTILS_RASTER_GDAL,
+        raster_datatype = TARGETS_UTILS_RASTER_DATATYPE,
+        vector_filetype = TARGETS_UTILS_VECTOR_FILETYPE,
+        vector_gdal = TARGETS_UTILS_VECTOR_GDAL,
+        raster_args = TARGETS_UTILS_RASTER_ARGS,
+        vector_args = TARGETS_UTILS_VECTOR_ARGS
       )
     },
     read = function(path) {
@@ -70,7 +56,16 @@ tar_format_terra_nested <- function(
       )
 
       read_fun(path = path)
-    }
+    },
+    substitute = list(
+      TARGETS_UTILS_RASTER_FILETYPE = raster_filetype,
+      TARGETS_UTILS_RASTER_GDAL = raster_gdal,
+      TARGETS_UTILS_RASTER_DATATYPE = raster_datatype,
+      TARGETS_UTILS_VECTOR_FILETYPE = vector_filetype,
+      TARGETS_UTILS_VECTOR_GDAL = vector_gdal,
+      TARGETS_UTILS_RASTER_ARGS = raster_args,
+      TARGETS_UTILS_VECTOR_ARGS = vector_args
+    )
   )
 }
 
@@ -220,6 +215,8 @@ write_terra_nested <- function(
     file = file.path(root, "skeleton.rds"),
     version = 3
   )
+
+  path <- file.path(normalizePath(dirname(path)), basename(path))
 
   if (file.exists(path)) {
     unlink(path, force = TRUE)
