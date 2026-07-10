@@ -90,6 +90,10 @@ tar_dir({
   print(class(x))
   print(names(x))
   x$mess
+  
+  library(bssdm)
+  
+  plot(x)
 
 })
 ```

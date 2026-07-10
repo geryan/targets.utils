@@ -245,17 +245,28 @@ write_terra_nested <- function(
 #' @export
 #' @keywords internal
 read_terra_nested <- function(path) {
-  root <- tempfile("targets_utils_terra_nested_read_")
-  dir.create(root, recursive = TRUE, showWarnings = FALSE)
-  on.exit(unlink(root, recursive = TRUE, force = TRUE), add = TRUE)
-
-  utils::untar(
-    tarfile = path,
-    exdir = root,
-    tar = "internal"
-  )
+  # terra reads SpatRasters lazily: terra::rast() keeps a pointer to the file
+  # on disk rather than loading cell values into memory. The extracted files
+  # must therefore outlive this function, or later operations that touch raster
+  # values (e.g. plot()) fail because the backing file is gone. Mirroring
+  # geotargets' "zip" read mode, we extract into the session-persistent
+  # tempdir() and do not delete it. The directory is keyed on the archive so a
+  # rebuilt target (new content) extracts afresh rather than reusing stale
+  # files, while repeated reads of the same archive reuse the extraction.
+  key <- unname(tools::md5sum(path))
+  root <- file.path(tempdir(), "targets_utils_terra_nested", key)
 
   skeleton_path <- file.path(root, "skeleton.rds")
+
+  if (!file.exists(skeleton_path)) {
+    dir.create(root, recursive = TRUE, showWarnings = FALSE)
+
+    utils::untar(
+      tarfile = path,
+      exdir = root,
+      tar = "internal"
+    )
+  }
 
   if (!file.exists(skeleton_path)) {
     stop(
