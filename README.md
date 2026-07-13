@@ -29,12 +29,15 @@ putting this on fucking cran) of `targets.utils` from
 pak::pak("geryan/targets.utils")
 ```
 
-## Quick Start: Interactive Utilities
+## You are a lazy person who doesn’t like the drudgery of typing
 
 These functions make interactive work with targets pipelines faster:
 
+- **`tg()`**: Load all globals with one command
+- **`te()`**: Load all targets and globals with one command
 - **`tl()`**: Load all globals and targets with a single command
 - **`tml(x)`**: Make and load a specific target in one call
+- **`tar_downstream(x)`**: Find what targets depend on a target
 - **`insert_tar_target()`**: RStudio addin to insert target skeletons
 
 ### Loading targets interactively with `tl()`
