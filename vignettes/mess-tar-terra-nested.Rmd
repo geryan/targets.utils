@@ -31,6 +31,7 @@ example runs in a fraction of a second and requires no network access.
 
 ```{r}
 library(targets)
+library(bssdm)
 
 tar_dir({
 
@@ -91,8 +92,7 @@ tar_dir({
   print(names(x))
   x$mess
   
-  library(bssdm)
-  
+  # Plot the MESS result
   plot(x)
 
 })
