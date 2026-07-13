@@ -8,10 +8,10 @@ A collection of utility functions for interactively working with
 functions streamline common workflows like loading target outputs,
 running specific targets, and handling spatial data.
 
-## Installation
+## Install me
 
-You can install the development (only) version (I’m not dealing with
-putting this on fucking cran) of `targets.utils` from
+You can install the ~~development~~ *only* version — I’m not dealing
+with putting this on fucking cran — of `targets.utils` from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -20,17 +20,34 @@ putting this on fucking cran) of `targets.utils` from
 pak::pak("geryan/targets.utils")
 ```
 
-## Quick Start: Interactive Utilities
+## Such `<- fun(){}`
 
-These functions make interactive work with targets pipelines faster:
+**I am a lazy person who doesn’t like the drudgery of typing**
 
-- **[`tl()`](https://geryan.github.io/targets.utils/reference/tl.md)**:
-  Load all globals and targets with a single command
-- **`tml(x)`**: Make and load a specific target in one call
-- **[`insert_tar_target()`](https://geryan.github.io/targets.utils/reference/insert_tar_target.md)**:
-  RStudio addin to insert target skeletons
+- [`tg()`](https://geryan.github.io/targets.utils/reference/tg.md): why
+  bother with `tar_load_globals`?
+- [`te()`](https://geryan.github.io/targets.utils/reference/te.md): why
+  bother with `tar_load_everything`?
+- [`tl()`](https://geryan.github.io/targets.utils/reference/tl.md): why
+  bother with `tar_load_globals` `tar_load_everything`?
+- `tml(x)`: why bother with `tar_make(x)` `tar_load(x)`
+- [`insert_tar_target()`](https://geryan.github.io/targets.utils/reference/insert_tar_target.md):
+  why bother with `tar_target(name = , commmand = )`. WTF that’s barely
+  any shorter?
 
-### Loading targets interactively with `tl()`
+**Is this the Pompidou? I am lost in the pipeline**
+
+- `tar_upstream(x)`: Find what targets a target depends on
+- `tar_downstream(x)`: Find what targets depend on a target
+
+**My data structures are overcomplicated and fussy: spatial edition**
+
+- [`tar_terra_nested()`](https://geryan.github.io/targets.utils/reference/tar_terra_nested.md):
+  Create a target with nested spatial `terra` objects
+
+## I am a lazy person who doesn’t like the drudgery of typing
+
+### Loading everything with `tl()`
 
 ``` r
 
@@ -62,7 +79,8 @@ function is an RStudio addin that inserts a
 [`tar_target()`](https://docs.ropensci.org/targets/reference/tar_target.html)
 skeleton at your cursor:
 
-You really never want to type this youself — sorta defeats the purpose.
+You really don’t want to type this yourself — sorta defeats the purpose
+eh.
 
 You *can* use the Addins menu:
 
@@ -70,12 +88,13 @@ Addins \> Insert tar_target
 
 But this is also tedious.
 
-The main point is to bind it to a shortcut key, e.g. Cmd+t, and blammo,
-target skeleton inserted into your list and onward and upward:
+The main point is to bind it to a shortcut key, e.g. `Cmd + t`, and
+**blammo**, target skeleton inserted into your list and onward and
+upward:
 
 Tools \> Modify Keyboard Shortcuts
 
-Find Insert `tar_target`, specify your preferred hotkey and apply away.
+Find Insert tar_target, specify your preferred hotkey and apply away.
 
 This functionality inspired with much admiration by [Mile’s McBain’s
 `fnmate` package](https://github.com/MilesMcBain/fnmate)
@@ -111,17 +130,49 @@ tar_script({
 })
 ```
 
-## Handling nested spatial data with `tar_terra_nested()`
+## Is this the Pompidou? I am lost in the pipeline
 
-The [`geotargets`
+Navigate your pipeline dependencies with
+[`tar_downstream()`](https://geryan.github.io/targets.utils/reference/tar_downstream.md)
+and
+[`tar_upstream()`](https://geryan.github.io/targets.utils/reference/tar_upstream.md)
+
+``` r
+
+# See what depends on the 'raw_data' target
+tar_downstream(raw_data)
+# [1] "processed_data" "summary_stats" "final_model" ...
+
+# See only direct dependents (immediate = TRUE)
+tar_downstream(raw_data, immediate = TRUE)
+# [1] "processed_data" "summary_stats"
+
+# See what 'final_model' depends on
+tar_upstream(final_model)
+# [1] "raw_data" "processed_data" "model_config"
+
+# See only direct dependencies
+tar_upstream(final_model, immediate = TRUE)
+# [1] "processed_data" "model_config"
+
+# Useful for understanding impact of changes and tracing dependencies
+```
+
+## My data structures are overcomplicated and fussy: spatial edition
+
+Handling nested spatial data with
+[`tar_terra_nested()`](https://geryan.github.io/targets.utils/reference/tar_terra_nested.md)
+
+The fucking excellent [`geotargets`
 package](https://docs.ropensci.org/geotargets/index.html) handles
 [`terra::SpatRaster`](https://rspatial.github.io/terra/reference/SpatRaster-class.html)
 and
 [`terra::SpatVector`](https://rspatial.github.io/terra/reference/SpatVector-class.html)
-objects, but cannot serialize lists containing nested spatial objects.
+objects, but chokes on lists containing nested spatial objects.
 [`tar_terra_nested()`](https://geryan.github.io/targets.utils/reference/tar_terra_nested.md)
-fills this gap by recursively discovering and managing nested spatial
-formats within arbitrary R objects.
+fills that gap by recursively finding and managing nested spatial
+formats buried inside arbitrary R objects. How recursive? How arbitrary?
+Try me. I’ll probably break.
 
 ### Example: Nested spatial data in a list
 
@@ -183,7 +234,7 @@ tar_dir({
 #> terra 1.9.38
 #> + nested_spatial dispatched
 #> ✔ nested_spatial completed [12ms, 46.45 kB]
-#> ✔ ended pipeline [219ms, 1 completed, 0 skipped]
+#> ✔ ended pipeline [214ms, 1 completed, 0 skipped]
 #> $raster
 #> class       : SpatRaster
 #> size        : 90, 95, 1  (nrow, ncol, nlyr)
@@ -224,10 +275,10 @@ cannot serialize
 or
 [`terra::SpatVector`](https://rspatial.github.io/terra/reference/SpatVector-class.html)
 objects. The `geotargets` package solves this for top-level spatial
-objects using custom formats that write to GeoTIFF and GeoPackage files.
+objects with custom formats that write to GeoTIFF and GeoPackage.
 
-However, `geotargets` cannot handle objects that *contain* nested
-spatial formats, such as:
+But `geotargets` can’t handle objects that *contain* nested spatial
+formats, such as:
 
 - Lists with spatial elements
 - Data frames with spatial list-columns  
@@ -271,8 +322,8 @@ tar_script({
 })
 ```
 
-AI did much of this, so it will probably break. Trust it at your own
-peril.
+AI did much of this donkeywork so it will probably break. Trust it at
+your own peril.
 
 ### Example: Nested spatial data in a tibble
 
@@ -308,59 +359,6 @@ tar_script({
 })
 ```
 
-## Example analytical workflow
-
-Here’s a toy example combining multiple targets.utils functions:
-
-``` r
-
-tar_script({
-  library(targets)
-  library(targets.utils)
-  library(terra)
-  library(tibble)
-
-  # A helper function that produces nested spatial data
-  process_spatial_data <- function(raster_file, vector_file) {
-    list(
-      raster = terra::rast(raster_file),
-      vector = terra::vect(vector_file),
-      processing_date = Sys.Date()
-    )
-  }
-
-  list(
-    # Load raw data
-    tar_target(
-      raw_spatial,
-      process_spatial_data(
-        system.file("ex", "elev.tif", package = "terra"),
-        system.file("ex", "lux.shp", package = "terra")
-      ),
-      # Use tar_terra_nested to handle the nested list
-      format = "custom_format"
-    ),
-    
-    # Use it() here to insert the next target skeleton
-    # Cursor position + it() generates: tar_target(name = , command = ),
-  )
-})
-```
-
-Then interactively:
-
-``` r
-
-# After editing your _targets.R:
-tml(raw_spatial)  # Make and load raw_spatial target
-
-# Inspect the loaded data
-str(raw_spatial)
-
-# When done with all targets:
-tl()  # Load everything into your session
-```
-
 # Package index
 
 ## All functions
@@ -368,11 +366,17 @@ tl()  # Load everything into your session
 - [`insert_tar_target()`](https://geryan.github.io/targets.utils/reference/insert_tar_target.md)
   : Insert a tar_target() skeleton
 - [`tar_downstream()`](https://geryan.github.io/targets.utils/reference/tar_downstream.md)
-  : NOT WORKING PROPERLY YET
+  : Get downstream targets from a specified target
 - [`tar_format_terra_nested()`](https://geryan.github.io/targets.utils/reference/tar_format_terra_nested.md)
   : Create a custom targets format for nested terra objects
 - [`tar_terra_nested()`](https://geryan.github.io/targets.utils/reference/tar_terra_nested.md)
   : Create a target for nested objects containing terra objects
+- [`tar_upstream()`](https://geryan.github.io/targets.utils/reference/tar_upstream.md)
+  : Get upstream targets from a specified target
+- [`te()`](https://geryan.github.io/targets.utils/reference/te.md) :
+  Load all targets and globals from a targets pipeline
+- [`tg()`](https://geryan.github.io/targets.utils/reference/tg.md) :
+  Load all globals from a targets pipeline
 - [`tl()`](https://geryan.github.io/targets.utils/reference/tl.md) :
   Targets load globals and everything
 - [`tml()`](https://geryan.github.io/targets.utils/reference/tml.md) :

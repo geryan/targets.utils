@@ -84,6 +84,7 @@ synthetic three-variable raster so the example runs in a fraction of a
 second and requires no network access.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/targets/" class="external-link">targets</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cebra-analytics/bssdm" class="external-link">bssdm</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_dir.html" class="external-link">tar_dir</a></span><span class="op">(</span><span class="op">{</span></span>
 <span></span>
@@ -143,23 +144,21 @@ second and requires no network access.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">x</span><span class="op">$</span><span class="va">mess</span></span>
+<span>  </span>
+<span>  <span class="co"># Plot the MESS result</span></span>
+<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">#&gt; terra 1.9.34</span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">+</span> <span style="color: #0000BB;">mess_result</span> dispatched</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">mess_result</span> completed [143ms, 4.32 kB]</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> ended pipeline [323ms, 1 completed, 0 skipped]</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">mess_result</span> completed [159ms, 4.32 kB]</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> ended pipeline [380ms, 1 completed, 0 skipped]</span></span>
 <span><span class="co">#&gt; [1] "MessResult" "list"      </span></span>
 <span><span class="co">#&gt; [1] "mess"             "mess_by_variable" "mod"              "mos"</span></span>
-<span><span class="co">#&gt; class       : SpatRaster</span></span>
-<span><span class="co">#&gt; size        : 20, 20, 1  (nrow, ncol, nlyr)</span></span>
-<span><span class="co">#&gt; resolution  : 0.5, 0.5  (x, y)</span></span>
-<span><span class="co">#&gt; extent      : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span></span>
-<span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326)</span></span>
-<span><span class="co">#&gt; source      : rast_000001.tif</span></span>
-<span><span class="co">#&gt; name        :      mess</span></span>
-<span><span class="co">#&gt; min value   : -3.785846</span></span>
-<span><span class="co">#&gt; max value   :        80</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">[plot mode]</span> fit legend/component: Some legend items or map compoments do not</span></span>
+<span><span class="co">#&gt; fit well, and are therefore rescaled.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Set the tmap option `component.autoscale = FALSE` to disable rescaling.</span></span></code></pre></div>
+<p><img src="mess-tar-terra-nested_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="700"></p>
 <p>The reconstructed object retains its original <code>MessResult</code>
 class and all four <code>SpatRaster</code> layers, each transparently
 restored from disk. The same approach works for any function that

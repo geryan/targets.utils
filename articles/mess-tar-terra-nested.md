@@ -24,6 +24,7 @@ network access.
 ``` r
 
 library(targets)
+library(bssdm)
 
 tar_dir({
 
@@ -83,24 +84,23 @@ tar_dir({
   print(class(x))
   print(names(x))
   x$mess
+  
+  # Plot the MESS result
+  plot(x)
 
 })
 #> terra 1.9.34
 #> + mess_result dispatched
-#> ✔ mess_result completed [143ms, 4.32 kB]
-#> ✔ ended pipeline [323ms, 1 completed, 0 skipped]
+#> ✔ mess_result completed [159ms, 4.32 kB]
+#> ✔ ended pipeline [380ms, 1 completed, 0 skipped]
 #> [1] "MessResult" "list"      
 #> [1] "mess"             "mess_by_variable" "mod"              "mos"
-#> class       : SpatRaster
-#> size        : 20, 20, 1  (nrow, ncol, nlyr)
-#> resolution  : 0.5, 0.5  (x, y)
-#> extent      : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)
-#> coord. ref. : lon/lat WGS 84 (EPSG:4326)
-#> source      : rast_000001.tif
-#> name        :      mess
-#> min value   : -3.785846
-#> max value   :        80
+#> [plot mode] fit legend/component: Some legend items or map compoments do not
+#> fit well, and are therefore rescaled.
+#> ℹ Set the tmap option `component.autoscale = FALSE` to disable rescaling.
 ```
+
+![](mess-tar-terra-nested_files/figure-html/unnamed-chunk-2-1.png)
 
 The reconstructed object retains its original `MessResult` class and all
 four `SpatRaster` layers, each transparently restored from disk. The

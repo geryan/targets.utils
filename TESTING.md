@@ -103,8 +103,11 @@ functions in targets.utils:
 
 #### Serialization Functions
 
-- [x] `write_terra_nested()` and `read_terra_nested()` roundtrip
-  correctly
+- [x]
+  [`write_terra_nested()`](https://geryan.github.io/targets.utils/reference/write_terra_nested.md)
+  and
+  [`read_terra_nested()`](https://geryan.github.io/targets.utils/reference/read_terra_nested.md)
+  roundtrip correctly
 - [x] `replace_terra_objects()` identifies SpatRaster objects
 - [x] `restore_terra_objects()` reconstructs reference objects
 - [x]
