@@ -44,6 +44,45 @@ This is the most comprehensive test file with 48 tests covering:
 - `restore_terra_objects()` object reconstruction
 - Reference object creation and identification
 
+### `test-tar_downstream.R` - Tests for `tar_downstream()` function
+Integration tests using real target pipelines with 20 tests covering:
+
+#### Core Functionality
+- Finding all downstream targets in linear dependency chains
+- Handling branching pipelines with multiple parallel paths
+- Complex dependency trees with multiple levels
+- Error handling for nonexistent targets
+
+#### Advanced Features
+- `immediate = TRUE` argument for first-degree dependencies only
+- Symbol and character input handling
+- Combining with actual spatial pipelines (terra/geotargets)
+
+#### Testing Patterns
+- Uses `tar_dir()` and `tar_script()` to create real pipelines
+- Executes with `tar_make(callr_function = NULL)` for in-process execution
+- Validates dependency graph traversal with real target networks
+
+### `test-tar_upstream.R` - Tests for `tar_upstream()` function
+Integration tests using real target pipelines with 22 tests covering:
+
+#### Core Functionality
+- Finding all upstream targets (dependencies) in linear chains
+- Handling branching where one target has multiple dependencies
+- Complex dependency trees from the opposite direction
+- Error handling for nonexistent targets
+
+#### Advanced Features
+- `immediate = TRUE` argument for direct dependencies only
+- Relationship testing: `tar_upstream()` and `tar_downstream()` as inverses
+- Symbol and character input handling
+- Complex real-world pipeline scenarios
+
+#### Testing Patterns
+- Mirrors `tar_downstream()` test structure for consistency
+- Uses actual target pipelines with real dependencies
+- Tests both complete transitive closure and immediate dependencies
+
 ## Running Tests
 
 ### Run all tests:
@@ -57,6 +96,9 @@ devtools::test(filter = "tl")
 devtools::test(filter = "tml")
 devtools::test(filter = "insert-tar-target")
 devtools::test(filter = "tar-terra-nested")
+devtools::test(filter = "tar_downstream")
+devtools::test(filter = "tar_upstream")
+devtools::test(filter = "tar_downstream|tar_upstream")  # Both together
 ```
 
 ### Run with detailed output:
@@ -76,7 +118,9 @@ The test suite covers:
 | `tml()` | 3 | Making, loading, dependencies, errors |
 | `insert_tar_target()` / `it()` | 5 | Existence, signatures, aliasing |
 | `tar_terra_nested()` | 48 | Serialization, formats, nested objects |
-| **Total** | **58** | Comprehensive |
+| `tar_downstream()` | 20 | Linear chains, branching, immediate mode |
+| `tar_upstream()` | 22 | Upstream chains, immediate mode, inverses |
+| **Total** | **100** | Comprehensive integration testing |
 
 ## Test Dependencies
 
@@ -84,19 +128,20 @@ Tests require the following packages to be installed:
 
 - `testthat` - Testing framework
 - `targets` - Targets pipeline framework
-- `terra` - Spatial data handling
+- `terra` - Spatial data handling (for spatial tests)
 - `tibble` - For tibble tests
 - `withr` - For temporary directory management
+- `igraph` - For tar_downstream/tar_upstream tests
 
-Some tests are skipped if these packages are not available.
+Some tests are skipped if these packages are not available using `skip_if_not_installed()`.
 
 ## Key Testing Patterns
 
 ### Temporary Directories
-Tests use `tempfile()` and `withr::with_dir()` to run tests in isolated temporary directories, preventing side effects on the user's file system.
+Tests use `tempfile()`, `withr::with_dir()`, and `targets::tar_dir()` to run tests in isolated temporary directories, preventing side effects on the user's file system.
 
 ### Target Pipeline Setup
-Integration tests create minimal `_targets.R` scripts using `targets::tar_script()` and execute pipelines with `targets::tar_make(callr_function = NULL)` to run in-process for better error reporting.
+Integration tests create minimal `_targets.R` scripts using `targets::tar_script()` and execute pipelines with `targets::tar_make(callr_function = NULL)` to run in-process for better error reporting. This pattern is especially important for `tar_downstream()` and `tar_upstream()` tests which require real pipeline networks.
 
 ### Spatial Object Verification
 Tests verify spatial objects are properly serialized and deserialized by checking:
@@ -107,6 +152,13 @@ Tests verify spatial objects are properly serialized and deserialized by checkin
 
 ### Roundtrip Testing
 Serialization functions are tested with roundtrip patterns: write → read → verify
+
+### Dependency Graph Testing
+`tar_downstream()` and `tar_upstream()` tests use real target pipelines to validate dependency graph traversal:
+- Create actual target definitions with true dependencies
+- Execute `tar_make()` to build the real network metadata
+- Test graph traversal on live pipeline networks
+- Validate both transitive (all dependencies) and immediate (direct only) modes
 
 ## Notes on RStudio Addins
 

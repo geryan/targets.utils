@@ -11,6 +11,7 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.3
 Imports: 
+    igraph,
     methods,
     rstudioapi,
     targets,
@@ -24,7 +25,9 @@ Suggests:
     rlang,
     testthat,
     tibble,
-    withr
+    tmap,
+    withr,
+    mockery
 Remotes: 
     cebra-analytics/bssdm
 VignetteBuilder: knitr

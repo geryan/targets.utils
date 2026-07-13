@@ -5,9 +5,12 @@
 
 <!-- badges: start -->
 
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/geryan/targets.utils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/geryan/targets.utils/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/geryan/targets.utils/branch/main/graph/badge.svg)](https://app.codecov.io/gh/geryan/targets.utils?branch=main)
+
 <!-- badges: end -->
 
 A haphazard collection of wildly different utilities with no common
@@ -18,10 +21,10 @@ A collection of utility functions for interactively working with
 functions streamline common workflows like loading target outputs,
 running specific targets, and handling spatial data.
 
-## Installation
+## Install me
 
-You can install the development (only) version (I’m not dealing with
-putting this on fucking cran) of `targets.utils` from
+You can install the ~~development~~ *only* version — I’m not dealing
+with putting this on fucking cran — of `targets.utils` from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -29,18 +32,30 @@ putting this on fucking cran) of `targets.utils` from
 pak::pak("geryan/targets.utils")
 ```
 
-## You are a lazy person who doesn’t like the drudgery of typing
+## Such `<- fun(){}`
 
-These functions make interactive work with targets pipelines faster:
+**I am a lazy person who doesn’t like the drudgery of typing**
 
-- **`tg()`**: Load all globals with one command
-- **`te()`**: Load all targets and globals with one command
-- **`tl()`**: Load all globals and targets with a single command
-- **`tml(x)`**: Make and load a specific target in one call
-- **`tar_downstream(x)`**: Find what targets depend on a target
-- **`insert_tar_target()`**: RStudio addin to insert target skeletons
+- `tg()`: why bother with `tar_load_globals`?
+- `te()`: why bother with `tar_load_everything`?
+- `tl()`: why bother with `tar_load_globals` `tar_load_everything`?
+- `tml(x)`: why bother with `tar_make(x)` `tar_load(x)`
+- `insert_tar_target()`: why bother with
+  `tar_target(name = , commmand = )`. WTF that’s barely any shorter?
 
-### Loading targets interactively with `tl()`
+**Is this the Pompidou? I am lost in the pipeline**
+
+- `tar_upstream(x)`: Find what targets a target depends on
+- `tar_downstream(x)`: Find what targets depend on a target
+
+**My data structures are overcomplicated and fussy: spatial edition**
+
+- `tar_terra_nested()`: Create a target with nested spatial `terra`
+  objects
+
+## I am a lazy person who doesn’t like the drudgery of typing
+
+### Loading everything with `tl()`
 
 ``` r
 # After running tar_make(), load everything at once:
@@ -67,7 +82,8 @@ targets::tar_load(names = processed_data, envir = .GlobalEnv)
 The `insert_tar_target()` function is an RStudio addin that inserts a
 `tar_target()` skeleton at your cursor:
 
-You really never want to type this youself — sorta defeats the purpose.
+You really don’t want to type this yourself — sorta defeats the purpose
+eh.
 
 You *can* use the Addins menu:
 
@@ -75,12 +91,13 @@ Addins \> Insert tar_target
 
 But this is also tedious.
 
-The main point is to bind it to a shortcut key, e.g. Cmd+t, and blammo,
-target skeleton inserted into your list and onward and upward:
+The main point is to bind it to a shortcut key, e.g. `Cmd + t`, and
+**blammo**, target skeleton inserted into your list and onward and
+upward:
 
 Tools \> Modify Keyboard Shortcuts
 
-Find Insert `tar_target`, specify your preferred hotkey and apply away.
+Find Insert tar_target, specify your preferred hotkey and apply away.
 
 This functionality inspired with much admiration by [Mile’s McBain’s
 `fnmate` package](https://github.com/MilesMcBain/fnmate)
@@ -115,14 +132,42 @@ tar_script({
 })
 ```
 
-## Handling nested spatial data with `tar_terra_nested()`
+## Is this the Pompidou? I am lost in the pipeline
 
-The [`geotargets`
+Navigate your pipeline dependencies with `tar_downstream()` and
+`tar_upstream()`
+
+``` r
+# See what depends on the 'raw_data' target
+tar_downstream(raw_data)
+# [1] "processed_data" "summary_stats" "final_model" ...
+
+# See only direct dependents (immediate = TRUE)
+tar_downstream(raw_data, immediate = TRUE)
+# [1] "processed_data" "summary_stats"
+
+# See what 'final_model' depends on
+tar_upstream(final_model)
+# [1] "raw_data" "processed_data" "model_config"
+
+# See only direct dependencies
+tar_upstream(final_model, immediate = TRUE)
+# [1] "processed_data" "model_config"
+
+# Useful for understanding impact of changes and tracing dependencies
+```
+
+## My data structures are overcomplicated and fussy: spatial edition
+
+Handling nested spatial data with `tar_terra_nested()`
+
+The fucking excellent [`geotargets`
 package](https://docs.ropensci.org/geotargets/index.html) handles
-`terra::SpatRaster` and `terra::SpatVector` objects, but cannot
-serialize lists containing nested spatial objects. `tar_terra_nested()`
-fills this gap by recursively discovering and managing nested spatial
-formats within arbitrary R objects.
+`terra::SpatRaster` and `terra::SpatVector` objects, but chokes on lists
+containing nested spatial objects. `tar_terra_nested()` fills that gap
+by recursively finding and managing nested spatial formats buried inside
+arbitrary R objects. How recursive? How arbitrary? Try me. I’ll probably
+break.
 
 ### Example: Nested spatial data in a list
 
@@ -183,7 +228,7 @@ tar_dir({
 #> terra 1.9.38
 #> + nested_spatial dispatched
 #> ✔ nested_spatial completed [12ms, 46.45 kB]
-#> ✔ ended pipeline [219ms, 1 completed, 0 skipped]
+#> ✔ ended pipeline [214ms, 1 completed, 0 skipped]
 #> $raster
 #> class       : SpatRaster
 #> size        : 90, 95, 1  (nrow, ncol, nlyr)
@@ -220,11 +265,11 @@ tar_dir({
 
 The `targets` package stores objects as RDS files by default, which
 cannot serialize `terra::SpatRaster` or `terra::SpatVector` objects. The
-`geotargets` package solves this for top-level spatial objects using
-custom formats that write to GeoTIFF and GeoPackage files.
+`geotargets` package solves this for top-level spatial objects with
+custom formats that write to GeoTIFF and GeoPackage.
 
-However, `geotargets` cannot handle objects that *contain* nested
-spatial formats, such as:
+But `geotargets` can’t handle objects that *contain* nested spatial
+formats, such as:
 
 - Lists with spatial elements
 - Data frames with spatial list-columns  
@@ -266,8 +311,8 @@ tar_script({
 })
 ```
 
-AI did much of this, so it will probably break. Trust it at your own
-peril.
+AI did much of this donkeywork so it will probably break. Trust it at
+your own peril.
 
 ### Example: Nested spatial data in a tibble
 
@@ -299,55 +344,4 @@ tar_script({
     )
   )
 })
-```
-
-## Example analytical workflow
-
-Here’s a toy example combining multiple targets.utils functions:
-
-``` r
-tar_script({
-  library(targets)
-  library(targets.utils)
-  library(terra)
-  library(tibble)
-
-  # A helper function that produces nested spatial data
-  process_spatial_data <- function(raster_file, vector_file) {
-    list(
-      raster = terra::rast(raster_file),
-      vector = terra::vect(vector_file),
-      processing_date = Sys.Date()
-    )
-  }
-
-  list(
-    # Load raw data
-    tar_target(
-      raw_spatial,
-      process_spatial_data(
-        system.file("ex", "elev.tif", package = "terra"),
-        system.file("ex", "lux.shp", package = "terra")
-      ),
-      # Use tar_terra_nested to handle the nested list
-      format = "custom_format"
-    ),
-    
-    # Use it() here to insert the next target skeleton
-    # Cursor position + it() generates: tar_target(name = , command = ),
-  )
-})
-```
-
-Then interactively:
-
-``` r
-# After editing your _targets.R:
-tml(raw_spatial)  # Make and load raw_spatial target
-
-# Inspect the loaded data
-str(raw_spatial)
-
-# When done with all targets:
-tl()  # Load everything into your session
 ```

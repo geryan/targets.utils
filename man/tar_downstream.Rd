@@ -2,21 +2,40 @@
 % Please edit documentation in R/tar_downstream.R
 \name{tar_downstream}
 \alias{tar_downstream}
-\title{NOT WORKING PROPERLY YET}
+\title{Get downstream targets from a specified target}
 \usage{
-tar_downstream(target_name)
+tar_downstream(target_name, immediate = FALSE)
 }
 \arguments{
-\item{target_name}{Unquoted target name.}
+\item{target_name}{Symbol or character. Name of the target to find downstream
+targets from.}
+
+\item{immediate}{Logical. If `TRUE`, return only first-degree dependencies
+(targets that directly depend on `target_name`). If `FALSE` (default),
+return all downstream targets, including indirect dependencies.}
 }
 \value{
-Character vector of downstream target names.
+Character vector of downstream target names (excluding the target
+  itself). Returns an empty character vector if there are no downstream
+  targets.
 }
 \description{
-NOT WORKING PROPERLY YET
+Find all targets that depend on a given target, either directly or indirectly.
+This is useful for understanding the impact of changes to a target on the
+rest of the pipeline.
+}
+\details{
+This function requires the `igraph` package, which is listed in Imports.
+It queries the current targets pipeline via `targets::tar_network()` and
+traverses the dependency graph to find all targets that depend on the
+specified target.
 }
 \examples{
-\dontrun{tar_downstream(my_target)}
+\dontrun{
+# After tar_make(), show what depends on 'raw_data'
+tar_downstream(raw_data)
 
+# Only direct dependents
+tar_downstream("processed_data", immediate = TRUE)
 }
-\keyword{internal}
+}
